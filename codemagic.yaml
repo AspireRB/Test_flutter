@@ -1,13 +1,19 @@
-
 workflows:
   ios-workflow:
     name: iOS Workflow
     environment:
+      flutter: stable
       xcode: latest
     scripts:
-      - name: Build IPA
-        script: xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -sdk iphoneos -configuration Release archive -archivePath $CM_BUILD_DIR/Runner.xcarchive
-      - name: Export IPA
-        script: xcodebuild -exportArchive -archivePath $CM_BUILD_DIR/Runner.xcarchive -exportOptionsPlist ios/Runner/ExportOptions.plist -exportPath $CM_BUILD_DIR
+      - name: Install dependencies
+        script: |
+          flutter packages get
+      - name: Build iOS
+        script: |
+          flutter build ios --release --no-codesign
     artifacts:
-      - build/ios/ipa/*.ipa
+      - build/ios/ipa/**/*.ipa
+    publishing:
+      email:
+        recipients:
+          - 74331334+AspireRB@users.noreply.github.comtu-email@example.com
