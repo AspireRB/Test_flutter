@@ -1,0 +1,13 @@
+
+workflows:
+  ios-workflow:
+    name: iOS Workflow
+    environment:
+      xcode: latest
+    scripts:
+      - name: Build IPA
+        script: xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -sdk iphoneos -configuration Release archive -archivePath $CM_BUILD_DIR/Runner.xcarchive
+      - name: Export IPA
+        script: xcodebuild -exportArchive -archivePath $CM_BUILD_DIR/Runner.xcarchive -exportOptionsPlist ios/Runner/ExportOptions.plist -exportPath $CM_BUILD_DIR
+    artifacts:
+      - build/ios/ipa/*.ipa
